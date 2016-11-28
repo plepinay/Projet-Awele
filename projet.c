@@ -98,6 +98,7 @@ int Compte_Graine(int Mat[N][M]){ //Pour garder l'oeil sur le nombre de billes/g
 }
 
 int CapturePoints(int Mat[N][M], int joueur, int j, int nb){
+	//Capture des points; on s'assure d'être sur la bonne ligne pour commencer
 	int totalpris = 0;
 
 	if( ((j - 6) > 0) && (nb < 12)){
@@ -158,7 +159,7 @@ int deplacement_droite (int Mat[N][M], int j, int joueur, int nb){ //Déplacemen
 	return joueur;
 }
 int deplacement(int Mat[N][M], int j, int joueur, int nb){
-	
+	//Une fonction pour deux déplacements;
 	if(joueur == 0){
 		joueur = deplacement_gauche(Mat, j, joueur, nb);
 	} else if(joueur == 1){
@@ -169,7 +170,7 @@ int deplacement(int Mat[N][M], int j, int joueur, int nb){
 	return joueur;
 }
 int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char typeJ, int fin){
-	//joueur joue son tour ;
+	//joueur joue son tour ; rend le total de point gagnés
 	int nvJoueur;
 	j--;
 	nb = Mat[joueur][j];
@@ -185,6 +186,7 @@ int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char t
 }
 
 void JouerTour(int Mat[N][M], int j, int joueur, int nb, char typeJ, int fin){
+	//joueur joue son tour;
 	int nvJoueur;
 	j--;
 	nb = j--;
