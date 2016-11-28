@@ -123,17 +123,18 @@ int CapturePoints(int Mat[N][M], int joueur, int j, int nb){
 			j = j - 6;
 		}
 	}
-	
-	While(7);
-	while(bWhile("pourquoiçafaitça?(CapturePoints)", (j < 6) && (j >= 0)) ){
-		if((Mat[joueur][j] < 4) && (Mat[joueur][j] > 1)) {
-			totalpris = totalpris + Mat[joueur][j];
-			Mat[joueur][j] = 0;
-		}
-		if(joueur == 0){
-			j++;
-		} else if(joueur == 1){
-			j--;
+	if( (Mat[joueur][j] == 3) || (Mat[joueur][j] == 2) ){
+		While(7);
+		while(bWhile("pourquoiçafaitça?(CapturePoints)", (j < 6) && (j >= 0)) ){
+			if((Mat[joueur][j] < 4) && (Mat[joueur][j] > 1)) {
+				totalpris = totalpris + Mat[joueur][j];
+				Mat[joueur][j] = 0;
+			}
+			if(joueur == 0){
+				j++;
+			} else if(joueur == 1){
+				j--;
+			}
 		}
 	}
 	return totalpris;
