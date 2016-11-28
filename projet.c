@@ -3,6 +3,14 @@
 #define N 2
 #define M 6
 
+/**
+*@file
+*@brief Programme permettant de jouer une partie d'Awélé
+*@author Jolliet Corentin
+*@version version "J'ai pas compté"
+*@date Lundi 28 Novembre 2016
+*/
+
 
 int deplacement_droite (int Mat[N][M], int j, int joueur, int nb);
 int deplacement_gauche (int Mat[N][M], int j, int joueur, int nb);
@@ -10,6 +18,7 @@ int Compte_Graine(int Mat[N][M]);
 int bChaineEgale(char *sTexte1, char *sTexte2); //Toujours utile au cas où (surtout pour des mots de passe);
 int main2();
 
+/**\brief Initialise les valeurs de l'Awélé à 4*/
 void init_Mat(int Mat[N][M]){ //Initialisation de l'Awélé
 	int i, j;
 	
@@ -19,7 +28,7 @@ void init_Mat(int Mat[N][M]){ //Initialisation de l'Awélé
 		}
 	}
 }
-
+/**\brief Affiche les valeurs courantes de l'Awélé*/
 void AfficherMat(int Mat[N][M]){ //Affichage de l'Awélé et du reste des graines
 	int i, j, reste;
 	printf("\n   1 2 3 4 5 6\n");
@@ -34,7 +43,7 @@ void AfficherMat(int Mat[N][M]){ //Affichage de l'Awélé et du reste des graine
 	printf("\nIl reste %i points à prendre\n", reste);
 	
 }
-
+/**\brief Sélection d'une case de l'Awélé*/
 int Choix_case(char typeJ){ //Sélection de la case à déplacer selon le type de joueur
 	int j;
 	char c;
@@ -71,7 +80,7 @@ int Choix_case(char typeJ){ //Sélection de la case à déplacer selon le type d
 	}
 	return j;
 }
-
+/**\brief Test de Case vide avec correction imposée*/
 int Case_Vide(int Mat[N][M], int joueur, int j, int nb, char TypeJ){ //On prend en compte les cases vides et on force le joueur à en changer
 	while(nb == 0){
 		printf("Erreur, Case vide\n");
@@ -85,7 +94,7 @@ int Case_Vide(int Mat[N][M], int joueur, int j, int nb, char TypeJ){ //On prend 
 	}
 	return j;
 }
-
+/**\brief Compte le total de la somme des valeurs de l'Awélé*/
 int Compte_Graine(int Mat[N][M]){ //Pour garder l'oeil sur le nombre de billes/graines restantes, aussi bien durant les tests que durant la partie
 	int i, j;
 	int comptG = 0;
@@ -96,7 +105,7 @@ int Compte_Graine(int Mat[N][M]){ //Pour garder l'oeil sur le nombre de billes/g
 	}
 	return comptG;
 }
-
+/**\brief Ajoute les points des cases concernées au joueur concerné*/
 int CapturePoints(int Mat[N][M], int joueur, int j, int nb){
 	//Capture des points; on s'assure d'être sur la bonne ligne pour commencer
 	int totalpris = 0;
@@ -158,6 +167,7 @@ int deplacement_droite (int Mat[N][M], int j, int joueur, int nb){ //Déplacemen
 	}
 	return joueur;
 }
+/**\brief Gère les déplacements à gauche et à droite de l'Awélé*/
 int deplacement(int Mat[N][M], int j, int joueur, int nb){
 	//Une fonction pour deux déplacements;
 	if(joueur == 0){
@@ -169,6 +179,7 @@ int deplacement(int Mat[N][M], int j, int joueur, int nb){
 	}
 	return joueur;
 }
+/**\brief Un tour se déroule et on prend des points*/
 int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char typeJ, int fin){
 	//joueur joue son tour ; rend le total de point gagnés
 	int nvJoueur;
@@ -184,7 +195,7 @@ int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char t
 	j++;
 	return total;
 }
-
+/**\brief Un tour se déroule mais on ne prend pas les points*/
 void JouerTour(int Mat[N][M], int j, int joueur, int nb, char typeJ, int fin){
 	//joueur joue son tour;
 	int nvJoueur;
@@ -197,7 +208,7 @@ void JouerTour(int Mat[N][M], int j, int joueur, int nb, char typeJ, int fin){
 	nvJoueur = deplacement(Mat, j, joueur, nb);
 	j++;
 }
-
+/**\brief On arrête le jeu lorsqu'on a certaines valeurs*/
 int ArretJeu(int j1, int j2, char c, int fin, int arret){
 	if((j1 == 0) || (j2 == 0)){
 		while ((c != 'y') && (c != 'n')){
@@ -308,7 +319,7 @@ void TestOrdi(){
 	}while(compt < 1);
 	printf("\nFait\n");
 }
-
+/**\brief Test sur le type associé à un joueur (Ordi ou Joueur réel)*/
 void TestErrTJoueur() {
 
 	int Mat[N][M];
@@ -342,7 +353,7 @@ void TestErrTJoueur() {
 	}while(arret != 1);
 	
 }
-
+/**\brief Test sur le chiffre/nombre associé à un joueur*/
 void TestErrNumJoueur() {
 
 	int Mat[N][M];
@@ -426,7 +437,8 @@ void TestCapture(){
 	}while(arret != 1);
 
 }
-
+/**\brief Gestion de tout les tests : Jeu à 2, en Solo, ajout des points, Erreurs sur le joueur...
+Utilisable par mot de passe mais il est facile à trouver*/
 int Test(int comptest){
 
 	int arret, choix;
@@ -476,6 +488,7 @@ int Test(int comptest){
 		printf("\nInutilisable pour l'instant\n");
 	}
 }
+/**\brief Jeu contre l'Ordinateur*/
 void Partie_Solo(){
 	int Mat[N][M];
 	int fin = -1;
@@ -575,7 +588,7 @@ void Partie_Solo(){
 		}
 	}while( arret != 1 );
 }
-
+/**\brief Jeu entre 2 joueurs*/
 void Partie_A2(){
 	int Mat[N][M];
 	int fin = -1;
@@ -621,7 +634,7 @@ void Partie_A2(){
 
 	printf("\nTotal J1 : %i\nTotal J2 : %i\n", totalj1, totalj2);
 }
-
+/**\brief Affichage des meilleurs scores*/
 int Highscores(FILE * fic, int compt){ //Affichage du contenu d'un fichier 'Highscores'
 	
 	int rang, score, n;
@@ -643,7 +656,7 @@ int Highscores(FILE * fic, int compt){ //Affichage du contenu d'un fichier 'High
 		printf("\nDéjà utilisé précédemment\n");
 	}
 }
-
+/**\brief 'Menu' de sélection des modes de jeux et des autres fonctions*/
 int main2(){
 	int choix;
 	int compt = 0;
@@ -698,7 +711,7 @@ int main2(){
 	printf("\nA plus !\n"); //Fin
 	return EXIT_SUCCESS;
 }
-
+/**\brief Celle-là j'ai pas compris...*/
 void ModuleAmorceR(){
 	//amorce tous les modules (code à exécuter une fois pour toutes AVANT d'utiliser un quelconque module depuis le main)
 	OutilAMORCER();//NE PAS DECLASSER:doit toujours être appelé en premier
@@ -706,6 +719,7 @@ void ModuleAmorceR(){
 		//TasAMORCER();
 }//ModuleAmorceR
 
+/**\brief Fonction principale appelant les autres*/
 int main (int argc, const char * argv[]) {
 	Appel0("");//NE PAS TOUCHER; ce code doit toujours être placé au début du main
 		ModuleAmorceR();//NE PAS TOUCHER; ce code doit toujours suivre immédiatement Appel0("")
