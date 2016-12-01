@@ -4,11 +4,29 @@
 #define M 6
 
 /**
-*@file
-*@brief Programme permettant de jouer une partie d'Awélé
-*@author Jolliet Corentin
-*@version version "J'ai pas compté"
-*@date Lundi 28 Novembre 2016
+*\file
+*\brief Programme permettant de jouer une partie d'Awélé
+*\author Jolliet Corentin
+*\date Jeudi 1 Décembre 2016
+*\fn void init_Mat(int Mat[N][M])
+*\fn void AfficherMat(int Mat[N][M])
+*\fn int Choix_case(int Mat[N][M], char typeJ, int joueur)
+*\fn int Case_Vide(int Mat[N][M], int joueur, int j, int nb, char typeJ)
+*\fn int Compte_Graine(int Mat[N][M])
+*\fn int CapturePoints(int Mat[N][M], int joueur, int j, int nb)
+*\fn int deplacement_gauche (int Mat[N][M], int j, int joueur, int nb)
+*\fn int deplacement_droite (int Mat[N][M], int j, int joueur, int nb)
+*\fn int deplacement(int Mat[N][M], int j, int joueur, int nb)
+*\fn int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char typeJ, int fin)
+*\fn void JouerTour(int Mat[N][M], int j, int joueur, int nb, char typeJ, int fin)
+*\fn int ArretJeu(int j1, int j2, char c, int fin, int arret)
+*\fn int Test(int comptest)
+*\fn void Partie_Solo(void)
+*\fn void Partie_A2(void)
+*\fn int Highscores(FILE * fic, int compt)
+*\fn int main2(void)
+*\fn void ModuleAmorceR(void)
+*\fn int main(void)
 */
 
 
@@ -45,8 +63,70 @@ void AfficherMat(int Mat[N][M]){ //Affichage de l'Awélé et du reste des graine
 	
 }
 
+int Ordi(int Mat[N][M], int joueur){
+
+	int jc;
+	int j = 0;
+	int maxO = 0;
+	if(joueur == 0){
+		printf("Témoin 2\n");
+		jc = 0;
+		While(8);
+		while( bWhile("Pourquoiça?!(Ordi0())",(jc < 6) || ( (Mat[1][j] == 2) || (Mat[1][j] == 3) ) )){
+			jc++;
+		}
+		printf("Témoin 3 : jc = %i\n", jc);
+		While(8);
+		while(bWhile("Pourquoiça?!(Choix_case Ordi)",(Mat[joueur][j] <= maxO) && (j < 6) ) ){
+			if(Mat[joueur][j] > maxO){
+			maxO = Mat[joueur][j];
+			}
+			j++;
+		}
+		printf("Témoin 4 : j = %i ; jc + j = %i\n", j, (jc + j));
+
+		if( ((j + jc) != maxO) && (maxO < 12)){
+			j = maxO - 6;
+		} else {
+			while( maxO >= 12 ){
+				maxO = maxO - 6;
+			}
+			j = maxO;
+		}
+		printf("Témoin 5 : j = %i\n", j);
+		
+	} else if(joueur == 1){
+		printf("Témoin 2bis\n");
+		jc = 5;
+		While(8);
+		while( bWhile("Pourquoiça?!(Ordi1())",(jc >= 0) || ( (Mat[0][j] == 2) || (Mat[0][j] == 3) ) )){
+			jc--;
+		}
+		printf("Témoin 3bis : jc = %i\n", jc);
+		While(8);
+		while( bWhile("Pourquoiça?!(Choix_case Ordi)",(Mat[joueur][j] <= maxO) && (j < 6) )){
+			if(Mat[joueur][j] > maxO){
+			maxO = Mat[joueur][j];
+			}
+			j++;
+		}
+		printf("Témoin 4bis : j = %i ; jc + j = %i\n", j, (jc +j));
+
+		if( ((j + jc) != maxO) && (maxO < 12)){
+			j = maxO - 6;
+		} else {
+			while( maxO >= 12 ){
+				maxO = maxO - 6;
+			}
+			j = maxO;
+		}
+		printf("Témoin 5bis : j = %i\n", j);
+	}	
+	return j;
+}
+
 /**\brief Sélection d'une case de l'Awélé*/
-int Choix_case(char typeJ){ //Sélection de la case à déplacer selon le type de joueur
+int Choix_case(int Mat[N][M], char typeJ, int joueur){ //Sélection de la case à déplacer selon le type de joueur
 	int j;
 	char c;
 	printf("\nDéplacer quelle case ? \n");
@@ -61,21 +141,22 @@ int Choix_case(char typeJ){ //Sélection de la case à déplacer selon le type d
 			scanf("%*c%c", &c);
 			if(c == 'n'){
 				printf("Reprenons alors...\n");
-				j = Choix_case(typeJ);
+				j = Choix_case(Mat, typeJ, joueur);
 			} else if(c == 'y'){
 				j = 0;
 			} else {
 				printf("Mal écrit, on reprend : \n");
-				j = Choix_case(typeJ);
+				j = Choix_case(Mat, typeJ, joueur);
 			}
 		}
 	} else if (typeJ == 'O'){ //Joueur 'Ordinateur', choisi sa case au hasard
-		j = uHasard(6);
-		printf("\nOrdi déplace case %i", j);
-
+		printf("Témoin 1\n");
+		j = Ordi(Mat, joueur);
 		if( j == 0 ){ //Prévision en cas de j nul
 			j = 1;
 		}
+		printf("\nOrdi déplace case %i", j);
+
 	} else { //On prévoit l'erreur sur 'typeJ'
 		printf("ERREUR, 'typeJ' erronné : %c\nArrêt forcé\n", typeJ);
 		j = -1;
@@ -84,10 +165,10 @@ int Choix_case(char typeJ){ //Sélection de la case à déplacer selon le type d
 }
 
 /**\brief Test de Case vide avec correction imposée*/
-int Case_Vide(int Mat[N][M], int joueur, int j, int nb, char TypeJ){ //On prend en compte les cases vides et on force le joueur à en changer
+int Case_Vide(int Mat[N][M], int joueur, int j, int nb, char typeJ){ //On prend en compte les cases vides et on force le joueur à en changer
 	while(nb == 0){
-		printf("Erreur, Case vide\n");
-		j = Choix_case(TypeJ);
+		printf("\nErreur, Case vide\n");
+		j = Choix_case(Mat, typeJ, joueur);
 		if(j > 0){
 			j--;
 		}
@@ -114,17 +195,18 @@ int Compte_Graine(int Mat[N][M]){ //Pour garder l'oeil sur le nombre de billes/g
 int CapturePoints(int Mat[N][M], int joueur, int j, int nb){
 	//Capture des points; on s'assure d'être sur la bonne ligne pour commencer
 	int totalpris = 0;
-
 	if( ((j - 6) > 0) && (nb < 12)){
 		j = j - 6;
-		printf("j = %i\n", j);
 	} else if( nb >= 12 ){
 		while((j - 6) > 0){
 			j = j - 6;
 		}
 	}
-	if( (Mat[joueur][j] == 3) || (Mat[joueur][j] == 2) ){
-		While(7);
+	if (joueur == 0){
+		j = 6 - j;
+	}
+	if( (Mat[joueur][j] < 4) && (Mat[joueur][j] > 1) ){
+		While(10);
 		while(bWhile("pourquoiçafaitça?(CapturePoints)", (j < 6) && (j >= 0)) ){
 			if((Mat[joueur][j] < 4) && (Mat[joueur][j] > 1)) {
 				totalpris = totalpris + Mat[joueur][j];
@@ -132,7 +214,8 @@ int CapturePoints(int Mat[N][M], int joueur, int j, int nb){
 			}
 			if(joueur == 0){
 				j++;
-			} else if(joueur == 1){
+			}
+			if(joueur == 1){
 				j--;
 			}
 		}
@@ -197,6 +280,7 @@ int JouerTourCapture(int Mat[N][M], int j, int joueur, int nb, int total, char t
 	nb = Mat[joueur][j];
 	Mat[joueur][j] = 0;
 	nvJoueur = deplacement(Mat, j, joueur, nb);
+	printf("Joueur = %i\n", nvJoueur);
 	if (nvJoueur != joueur){
 		total = total + CapturePoints(Mat, nvJoueur, (j + nb), nb);
 	}
@@ -259,7 +343,7 @@ void TestA2() {
 	do{
 		printf("\n'Testeur 1' as J1\n");
 
-		j1 = Choix_case(typeJ);
+		j1 = Choix_case(Mat, typeJ, 0);
 
 		if((j1 != 0) && (j1 != -1)){
 			JouerTour(Mat, j1, 0, nb, typeJ, fin);
@@ -270,7 +354,7 @@ void TestA2() {
 
 		printf("\n'Testeur 2' as J2\n");
 
-		j2 = Choix_case(typeJ);
+		j2 = Choix_case(Mat, typeJ, 1);
 
 		if((j2 != 0) && (j2 != -1)){
 			JouerTour(Mat, j2, 1, nb, typeJ, fin);
@@ -284,7 +368,7 @@ void TestA2() {
 	
 }
 
-void TestOrdi(){
+void TestOrdi(){// Choix_case a un problème alors trouve-le !
 
 	int Mat[N][M];
 	int fin = -1;
@@ -303,7 +387,7 @@ void TestOrdi(){
 
 	do{
 		printf("\nTour 'OrdiTest1' as J1 :\n");
-		j1 = Choix_case(typeJ);
+		j1 = Choix_case(Mat, typeJ, 0);
 
 		if((j1 != 0) && (j1 != -1)){
 			JouerTour(Mat, j1, 0, nb, typeJ, fin);
@@ -313,7 +397,7 @@ void TestOrdi(){
 		AfficherMat(Mat);
 
 		printf("\nTour 'OrdiTest2' as J2 :\n");
-		j2 = Choix_case(typeJ);
+		j2 = Choix_case(Mat, typeJ, 1);
 
 		if((j2 != 0) && (j2 != -1)){
 			JouerTour(Mat, j2, 1, nb, typeJ, fin);
@@ -349,7 +433,7 @@ void TestErrTJoueur() {
 		printf("\n'Testeur' as J1\n");
 		
 
-		j1 = Choix_case(typeJ);
+		j1 = Choix_case(Mat, typeJ, 0);
 
 		if((j1 != 0) && (j1 != -1)){
 			JouerTour(Mat, j1, 0, nb, typeJ, fin);
@@ -390,7 +474,7 @@ void TestErrNumJoueur() {
 			j2 = fin;
 			printf("\nTest effectué : ERREUR sur 'joueur'\n");
 		} else {
-			j1 = Choix_case(typeJ);
+			j1 = Choix_case(Mat, typeJ, 0);
 
 			if((j1 != 0) && (j1 != -1)){
 				JouerTour(Mat, j1, 0, nb, typeJ, fin);
@@ -406,7 +490,7 @@ void TestErrNumJoueur() {
 	
 	
 }
-
+/**\brief Test d'ajout des points gagnés*/
 void TestCapture(){
 
 	int Mat[N][M];
@@ -425,7 +509,7 @@ void TestCapture(){
 		printf("\n'Testeur 1' as J1\n");
 		
 
-		j1 = Choix_case(typeJ);
+		j1 = Choix_case(Mat, typeJ, 0);
 		if((j1 != 0) && (j1 != -1)){
 			totalj1 = JouerTourCapture(Mat, j1, 0, nb, totalj1, typeJ, fin);
 		} else if(j1 == -1) {
@@ -435,7 +519,7 @@ void TestCapture(){
 
 		printf("\n'Testeur 2' as J2\n");
 
-		j2 = Choix_case(typeJ);
+		j2 = Choix_case(Mat, typeJ, 1);
 		if((j2 != 0) && (j2 != -1)){
 			totalj2 = JouerTourCapture(Mat, j2, 1, nb, totalj2, typeJ, fin);
 		} else if(j2 == -1) {
@@ -535,7 +619,7 @@ void Partie_Solo(){
 			printf("\nTour 'Joueur' as J1 :\n");
 			typeJ = 'J'; //A préciser pour la sélection de la case.
 
-			j1 = Choix_case(typeJ);
+			j1 = Choix_case(Mat, typeJ, 0);
 
 			if((j1 != 0) && (j1 != -1)){
 				JouerTour(Mat, j1, 0, nb, typeJ, fin);
@@ -547,7 +631,7 @@ void Partie_Solo(){
 			printf("\nTour 'Ordinateur' as J2 :\n");
 			typeJ = 'O';
 
-			j2 = Choix_case(typeJ);
+			j2 = Choix_case(Mat, typeJ, 1);
 
 			if((j1 != -1) && (j1 != 0)){
 				JouerTour(Mat, j2, 1, nb, typeJ, fin);
@@ -565,7 +649,7 @@ void Partie_Solo(){
 			printf("\nTour 'Ordinateur' as J1 :\n");
 			typeJ = 'O';
 
-			j1 = Choix_case(typeJ);
+			j1 = Choix_case(Mat, typeJ, 0);
 
 			if(j2 != 0){
 			//Passe si l'ordinateur n'a pas rencontré d'erreur ou si le joueur réel souhaite continuer
@@ -580,7 +664,7 @@ void Partie_Solo(){
 			printf("\nTour 'Joueur' as J2 :\n");
 			typeJ = 'J';
 
-			j2 = Choix_case(typeJ);
+			j2 = Choix_case(Mat, typeJ, 1);
 
 			if((j2 != 0) && (j2 != -1)){
 				JouerTour(Mat, j2, 1, nb, typeJ, fin);
@@ -617,33 +701,40 @@ void Partie_A2(){
 	init_Mat(Mat); //Initialisation OBLIGATOIRE !
 	AfficherMat(Mat);
 	
-	do{
+	while( arret != 1 ){
 
-	printf("\n'Joueur 1' as J1\n");
+		printf("\n'Joueur 1' as J1\n");
 	
+		j1 = Choix_case(Mat, typeJ, 0);
 
-	j1 = Choix_case(typeJ);
+		if((j1 != 0) && (j1 != -1)){
+			totalj1 = JouerTourCapture(Mat, j1, 0, nb, totalj1, typeJ, fin);
+		} else if(j1 == -1) {
+			j1 = fin;
+		}
+		AfficherMat(Mat);
+		printf("total point J1 : %i\n", totalj1);
 
-	if((j1 != 0) && (j1 != -1)){
-		JouerTour(Mat, j1, 0, nb, typeJ, fin);
-	} else if(j1 == -1) {
-		j1 = fin;
+		printf("\n'Joueur 2' as J2\n");
+
+		j2 = Choix_case(Mat, typeJ, 1);
+
+		if((j2 != 0) && (j2 != -1)){
+			totalj2 = JouerTourCapture(Mat, j2, 1, nb, totalj2, typeJ, fin);
+		} else if(j2 == -1) {
+			j2 = fin;
+		}
+		AfficherMat(Mat);
+		printf("total point J2 : %i\n", totalj2);
+		if((totalj1 < 24) && (totalj2 < 24)){
+			arret = ArretJeu(j1, j2, c, fin, arret);
+		} else if((totalj1 > 24) || (totalj2 > 24)){
+			arret = 1;
+		} else if((totalj1 == 24) && (totalj2 == 24)){
+			printf("Match nul\n");
+			arret = 1;
+		}
 	}
-	AfficherMat(Mat);
-
-	printf("\n'Joueur 2' as J2\n");
-
-	j2 = Choix_case(typeJ);
-
-	if((j2 != 0) && (j2 != -1)){
-		JouerTour(Mat, j2, 1, nb, typeJ, fin);
-	} else if(j2 == -1) {
-		j2 = fin;
-	}
-	AfficherMat(Mat);
-	
-	arret = ArretJeu(j1, j2, c, fin, arret);
-	}while( arret != 1 );
 
 	printf("\nTotal J1 : %i\nTotal J2 : %i\n", totalj1, totalj2);
 }
